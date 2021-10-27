@@ -129,7 +129,7 @@ const Navbar = () => {
   );
 
   return (
-    <Box sx={{ flexGrow: 0, border: "1px solid red" }}>
+    <Box sx={{ flexGrow: 0 }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton

@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 // Theme
 import ThemeContext from "../theme";
 
