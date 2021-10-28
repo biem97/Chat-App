@@ -1,19 +1,29 @@
-// Theme
-import ThemeContext from "../theme";
-
 // Layout
 import Layout from "./Layout";
 
 // Components
-import MainSection from "../containers/MainSection";
+import MessagesContainer from "../containers/MessagesContainer";
+import Navbar from "./Navbar";
+import TextInput from "./TextInput";
 
-const App = () => {
+// MUI
+import { styled, Box } from "@mui/material";
+
+const ChatBoxContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  flexGrow: 1,
+}));
+
+const App: React.FC = () => {
   return (
-    <ThemeContext>
-      <Layout>
-        <MainSection />
-      </Layout>
-    </ThemeContext>
+    <Layout>
+      <Navbar />
+      <ChatBoxContainer>
+        <MessagesContainer />
+        <TextInput />
+      </ChatBoxContainer>
+    </Layout>
   );
 };
 

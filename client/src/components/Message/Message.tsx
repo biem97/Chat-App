@@ -1,86 +1,65 @@
-import React, { useEffect, useRef } from "react";
-
 // MUI
-import { styled, Box, Paper } from "@mui/material";
-import clsx from "clsx";
-import { CSSProperties } from "@emotion/serialize";
+import { styled, Box } from "@mui/material";
+// import clsx from "clsx";
+import { IMessage, IUser } from "../../types";
 
-const MessageContentContainer = styled(Box)(({ theme }) => ({
+// Component
+import Avatar from "../Avatar";
+import MessageContent from "../MessageContent";
+
+const MessageContainer = styled(Box)(({ theme }) => ({
   display: "flex",
-  flexGrow: 1,
-  "&.right": {
-    flexDirection: "row-reverse",
-  },
+  minHeight: "50px",
+  justifyContent: "center",
+  alignItems: "flex-start",
+  gap: "10px",
+  padding: "0 5px 0 10px",
 }));
 
-const MessageContentPaper = styled(Paper)(({ theme }) => ({
+const AvatarContainer = styled(Box)(({ theme }) => ({
   flexGrow: 0,
-  padding: "7px 12px",
-  backgroundColor: `${theme.palette.mode === "dark" ? "#3e4042" : "#e4e6eb"}`,
+  alignSelf: "flex-end",
+  marginBottom: "10px",
 }));
 
-const MessageActionContainer = styled(Box)(({ theme }) => ({
-  flexGrow: 1,
+const MessengerDeliveryStatusContainer = styled(Box)(({ theme }) => ({
+  alignSelf: "stretch",
   display: "flex",
-  alignItems: "center",
-  "&.right": {
-    flexDirection: "row-reverse",
+  alignItems: "flex-end",
+  flexGrow: 0,
+  visibility: "hidden",
+  "&.isRead": {
+    visibility: "visible",
   },
 }));
 
-const MessageActions = styled("div")(({ theme }) => ({
-  visibility: "hidden",
-}));
+// TODO REMOVE
+const me: IUser = {
+  id: "son-1",
+  name: "Son Nguyen",
+};
 
-type Position = "left" | "right";
-
-type Visibility = "visible" | "hidden";
-
-interface IMessage {
-  message: string;
-  position?: Position;
-}
-
-const Message: React.FC<IMessage> = ({ message, position = "left" }) => {
-  const containerRef = useRef<any>();
-  const iconRef = useRef<any>();
-
-  useEffect(() => {
-    const setActionIconsVisibility = (state: Visibility) => {
-      iconRef.current.style.setProperty("visibility", state);
-    };
-    if (containerRef.current) {
-      containerRef.current.addEventListener("mouseover", () => {
-        setActionIconsVisibility("visible");
-      });
-      containerRef.current.addEventListener("mouseout", () => {
-        setActionIconsVisibility("hidden");
-      });
-    }
-
-    return () => {
-      containerRef.current.removeEventListener(
-        "mouseover",
-        setActionIconsVisibility
-      );
-      containerRef.current.removeEventListener(
-        "mouseout",
-        setActionIconsVisibility
-      );
-    };
-  });
+const Message: React.FC<{ message: IMessage }> = ({ message }) => {
+  const isMe = message.user.id === me.id;
   return (
-    <MessageContentContainer className={position === "right" ? "right" : ""}>
-      <MessageContentPaper>{message}</MessageContentPaper>
-      <MessageActionContainer
-        ref={containerRef}
-        className={position === "right" ? "right" : ""}
-      >
-        <MessageActions ref={iconRef} id="action-icons">
-          Icons
-        </MessageActions>
-      </MessageActionContainer>
-    </MessageContentContainer>
+    <MessageContainer>
+      {!isMe && (
+        <AvatarContainer>
+          <Avatar sx={{ width: 24, height: 24 }} />
+        </AvatarContainer>
+      )}
+      <MessageContent
+        message={message.content}
+        position={isMe ? "right" : "left"}
+      />
+      {isMe && (
+        <MessengerDeliveryStatusContainer
+        // className={clsx(isRead && "isRead")}
+        >
+          <Avatar sx={{ width: 18, height: 18 }} />
+        </MessengerDeliveryStatusContainer>
+      )}
+    </MessageContainer>
   );
 };
 

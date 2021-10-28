@@ -5,6 +5,9 @@ import reportWebVitals from "./reportWebVitals";
 // Components
 import App from "./components/App";
 
+// Theme
+import ThemeContext from "./theme";
+
 //  Material UI supports Roboto font by defaults
 //  https://mui.com/components/typography/#general
 import "@fontsource/roboto/300.css";
@@ -19,7 +22,9 @@ import client from "./graphql";
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <ThemeContext>
+        <App />
+      </ThemeContext>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")

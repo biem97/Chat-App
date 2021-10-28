@@ -1,9 +1,6 @@
-import React, { FC } from "react";
+import React from "react";
 
 import { styled } from "@mui/material";
-
-// Components
-import Navbar from "../Navbar";
 
 const MainLayoutRoot = styled("main")(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -13,13 +10,8 @@ const MainLayoutRoot = styled("main")(({ theme }) => ({
   flexDirection: "column",
 }));
 
-const Layout: FC = ({ children }) => {
-  return (
-    <MainLayoutRoot>
-      <Navbar />
-      {children}
-    </MainLayoutRoot>
-  );
+const Layout: React.FC = ({ children }) => {
+  return <MainLayoutRoot>{children}</MainLayoutRoot>;
 };
 
 export default Layout;
