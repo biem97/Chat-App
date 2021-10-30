@@ -19,5 +19,3 @@ export interface IMessagesBlock {
   messages: IMessage[];
   isRead: boolean;
 }
-
-export type IMessagesBlocks = IMessagesBlock[];

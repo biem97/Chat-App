@@ -3,7 +3,6 @@ import { TextField } from "@mui/material";
 
 // MUI
 import { styled, Paper, IconButton } from "@mui/material";
-import { IMessages } from "../../types";
 import {
   ThumbUp as ThumbUpIcon,
   ControlPoint as ControlPointIcon,

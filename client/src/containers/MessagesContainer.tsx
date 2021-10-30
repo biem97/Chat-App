@@ -1,191 +1,153 @@
 import React from "react";
 import Messages from "../components/Messages";
-import { IMessage } from "../types";
+import { IMessagesBlocks } from "../types";
+
+// MUI
+import { styled, Box } from "@mui/material";
+
+const MessagesBlocksContainer = styled(Box)(({ theme }) => ({
+  flexGrow: 1,
+  flexBasis: 0,
+  overflowX: "hidden",
+  overflowY: "auto",
+}));
 
 const MessagesContainer: React.FC = () => {
-  const messages: IMessage[] = [
+  const messagesBlocks: IMessagesBlocks = [
     {
-      id: "1",
+      id: "msg-1",
       user: {
         id: "son-1",
         name: "Son Nguyen",
       },
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sem lorem, molestie vel lobortis et, mollis ac lacus. Nunc nibh ligula, tincidunt sed egestas ac, pellentesque tincidunt ligula.",
+      messages: [
+        {
+          id: "msg-1-1",
+          content: "Hello John",
+        },
+      ],
+      isRead: true,
     },
     {
-      id: "2",
+      id: "msg-2",
       user: {
         id: "john-2",
         name: "John Doe",
       },
-      content:
-        "Pellentesque at eros vel mauris elementum pretium nec sit amet lacus. Donec sem dolor, accumsan vitae fringilla nec, vestibulum luctus risus.",
+      messages: [
+        {
+          id: "msg-2-1",
+          content: "Hi Son",
+        },
+        {
+          id: "msg-2-2",
+          content: "How are you?",
+        },
+      ],
+      isRead: true,
     },
     {
-      id: "3",
-      user: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      content:
-        "Nullam in mauris facilisis mauris ultricies vestibulum. Curabitur vel maximus urna. In placerat arcu eget condimentum egestas. Nunc tristique ex metus, ac dapibus sem egestas nec. Phasellus eleifend vulputate tortor, vitae pulvinar nibh tempus eu. Sed gravida nibh id orci pharetra, quis commodo leo blandit. Cras id sapien tellus. Nunc quis mi vestibulum, eleifend lorem in, vestibulum orci. Sed at erat interdum ante pretium bibendum at ornare nisi. Aenean pharetra lacinia facilisis. Duis congue vel augue non tempor. Nulla accumsan semper tortor, vestibulum efficitur purus sodales nec. Maecenas quis mattis enim. Curabitur porttitor, tortor non luctus porttitor, ex lacus elementum mi, nec malesuada leo lacus vitae est. Quisque efficitur nisi in tellus rutrum dapibus. Duis sed elementum quam. Sed vel dui ac tellus luctus semper. Phasellus id urna ligula. In hac habitasse platea dictumst. Curabitur volutpat elit a quam finibus, ut ullamcorper nibh tristique.",
-    },
-    {
-      id: "4",
+      id: "msg-3",
       user: {
         id: "son-1",
         name: "Son Nguyen",
       },
-      content:
-        "Donec tortor nulla, tincidunt non efficitur eu, rhoncus quis diam. Cras viverra vitae dui non egestas. Etiam justo magna, convallis non arcu vel, rhoncus mollis dolor.",
+      messages: [
+        {
+          id: "msg-3-1",
+          content: "I'm good. Thank you",
+        },
+        {
+          id: "msg-3-2",
+          content: "How about you?",
+        },
+        {
+          id: "msg-3-3",
+          content: "It's been awhile",
+        },
+        {
+          id: "msg-3-4",
+          content: "Are you still in school?",
+        },
+      ],
+      isRead: true,
     },
     {
-      id: "5",
-      user: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      content:
-        "In vulputate sapien cursus. Praesent dignissim arcu lectus, sit amet elementum ligula ornare sed. Maecenas aliquam risus massa, ac pretium erat lacinia quis.",
-    },
-    {
-      id: "6",
-      user: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      content:
-        "Suspendisse condimentum tincidunt sem, sit amet pulvinar nisi feugiat et. In hac habitasse platea dictumst. Phasellus quis erat scelerisque, molestie tellus ac, porta erat.",
-    },
-    {
-      id: "7",
-      user: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      content:
-        "Quisque ullamcorper est varius ipsum ultricies ornare. Nam ac dui eu libero pharetra posuere sed sed urna.",
-    },
-    {
-      id: "8",
+      id: "msg-4",
       user: {
         id: "john-2",
         name: "John Doe",
       },
-      content: "Quisque eget leo mollis massa eleifend iaculis. ",
+      messages: [
+        {
+          id: "msg-4-1",
+          content: "Haha yeah",
+        },
+        {
+          id: "msg-4-2",
+          content: "I still have one more year",
+        },
+      ],
+      isRead: true,
     },
     {
-      id: "9",
+      id: "msg-5",
       user: {
         id: "son-1",
         name: "Son Nguyen",
       },
-      content:
-        "Nam porta, risus eget sagittis varius, lectus urna volutpat mi, id bibendum elit ipsum at ligula. Proin dictum cursus risus, in blandit velit. Integer feugiat bibendum diam eget consectetur. Nunc elit ante, condimentum quis tincidunt hendrerit, semper vel purus.",
+      messages: [
+        {
+          id: "msg-5-1",
+          content:
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        },
+        {
+          id: "msg-5-2",
+          content:
+            "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+        },
+      ],
+      isRead: true,
     },
     {
-      id: "10",
+      id: "msg-6",
       user: {
         id: "john-2",
         name: "John Doe",
       },
-      content:
-        "Duis congue vel augue non tempor. Nulla accumsan semper tortor, vestibulum efficitur purus sodales nec.",
-    },
-    {
-      id: "11",
-      user: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      content:
-        "Phasellus eleifend vulputate tortor, vitae pulvinar nibh tempus eu.",
-    },
-    {
-      id: "12",
-      user: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      content:
-        "Maecenas quis mattis enim. Curabitur porttitor, tortor non luctus porttitor, ex lacus elementum mi, nec malesuada leo lacus vitae est. Quisque efficitur nisi in tellus rutrum dapibus.",
-    },
-    {
-      id: "13",
-      user: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      content:
-        "Phasellus eleifend vulputate tortor, vitae pulvinar nibh tempus eu.",
-    },
-    {
-      id: "14",
-      user: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      content:
-        "Maecenas quis mattis enim. Curabitur porttitor, tortor non luctus porttitor, ex lacus elementum mi, nec malesuada leo lacus vitae est. Quisque efficitur nisi in tellus rutrum dapibus.",
-    },
-    {
-      id: "15",
-      user: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      content:
-        "Phasellus eleifend vulputate tortor, vitae pulvinar nibh tempus eu.",
-    },
-    {
-      id: "16",
-      user: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      content:
-        "Maecenas quis mattis enim. Curabitur porttitor, tortor non luctus porttitor, ex lacus elementum mi, nec malesuada leo lacus vitae est. Quisque efficitur nisi in tellus rutrum dapibus.",
-    },
-    {
-      id: "17",
-      user: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      content:
-        "Phasellus eleifend vulputate tortor, vitae pulvinar nibh tempus eu.",
-    },
-    {
-      id: "18",
-      user: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      content:
-        "Maecenas quis mattis enim. Curabitur porttitor, tortor non luctus porttitor, ex lacus elementum mi, nec malesuada leo lacus vitae est. Quisque efficitur nisi in tellus rutrum dapibus.",
-    },
-    {
-      id: "19",
-      user: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      content:
-        "Phasellus eleifend vulputate tortor, vitae pulvinar nibh tempus eu.",
-    },
-    {
-      id: "20",
-      user: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      content:
-        "Maecenas quis mattis enim. Curabitur porttitor, tortor non luctus porttitor, ex lacus elementum mi, nec malesuada leo lacus vitae est. Quisque efficitur nisi in tellus rutrum dapibus.",
+      messages: [
+        {
+          id: "msg-6-1",
+          content:
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        },
+        {
+          id: "msg-6-2",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas elementum orci nec fermentum dictum. Pellentesque rutrum at sapien vitae accumsan. Duis odio libero, facilisis vel placerat vitae, molestie sed nisl. Phasellus elementum ligula a eros maximus, sed cursus orci pretium. Nullam eget nibh facilisis, vulputate mauris id, feugiat sapien. Integer pharetra malesuada magna, in auctor elit tincidunt in. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce a fringilla odio. Aenean elit libero, cursus ut posuere et, pretium ac lectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas elementum orci nec fermentum dictum. Pellentesque rutrum at sapien vitae accumsan. Duis odio libero, facilisis vel placerat vitae, molestie sed nisl. Phasellus elementum ligula a eros maximus, sed cursus orci pretium. Nullam eget nibh facilisis, vulputate mauris id, feugiat sapien. Integer pharetra malesuada magna, in auctor elit tincidunt in. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce a fringilla odio. Aenean elit libero, cursus ut posuere et, pretium ac lectus.",
+        },
+        {
+          id: "msg-6-3",
+          content: "Hello.",
+        },
+        {
+          id: "msg-6-4",
+          content:
+            "Suspendisse potenti. Sed varius laoreet nisi, vitae dictum arcu vehicula quis. Aliquam ornare congue metus, id tincidunt diam pharetra nec. Nunc eros nunc, faucibus a congue ullamcorper, ornare in justo. Donec consectetur libero nec imperdiet dictum. Maecenas ut porttitor libero. Donec vel congue mauris. Donec tellus orci, tincidunt id ex et, tempor tempor ex. Aliquam dignissim, dolor vitae posuere condimentum, elit velit mattis sem, a convallis dui lacus eget quam. Sed eu eros mollis, consequat leo quis, gravida turpis. Cras a malesuada lectus. Mauris vel leo vitae enim tincidunt imperdiet. Donec quis tellus arcu.. Suspendisse potenti. Sed varius laoreet nisi, vitae dictum arcu vehicula quis. Aliquam ornare congue metus, id tincidunt diam pharetra nec. Nunc eros nunc, faucibus a congue ullamcorper, ornare in justo. Donec consectetur libero nec imperdiet dictum. Maecenas ut porttitor libero. Donec vel congue mauris. Donec tellus orci, tincidunt id ex et, tempor tempor ex. Aliquam dignissim, dolor vitae posuere condimentum, elit velit mattis sem, a convallis dui lacus eget quam. Sed eu eros mollis, consequat leo quis, gravida turpis. Cras a malesuada lectus. Mauris vel leo vitae enim tincidunt imperdiet. Donec quis tellus arcu. It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+        },
+      ],
+      isRead: true,
     },
   ];
 
-  return <Messages messages={messages} />;
+  return (
+    <MessagesBlocksContainer>
+      {messagesBlocks.map((messagesBlock) => (
+        <Messages messagesBlock={messagesBlock} key={messagesBlock.id} />
+      ))}
+    </MessagesBlocksContainer>
+  );
 };
 
 export default MessagesContainer;

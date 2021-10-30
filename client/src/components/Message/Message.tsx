@@ -1,7 +1,7 @@
 // MUI
 import { styled, Box } from "@mui/material";
 // import clsx from "clsx";
-import { IMessage, IUser } from "../../types";
+import { IMessage } from "../../types";
 
 // Component
 import Avatar from "../Avatar";
@@ -9,17 +9,22 @@ import MessageContent from "../MessageContent";
 
 const MessageContainer = styled(Box)(({ theme }) => ({
   display: "flex",
-  minHeight: "50px",
+  margin: "3px 0",
   justifyContent: "center",
-  alignItems: "flex-start",
   gap: "10px",
   padding: "0 5px 0 10px",
 }));
 
 const AvatarContainer = styled(Box)(({ theme }) => ({
   flexGrow: 0,
-  alignSelf: "flex-end",
+  display: "flex",
+  justifyContent: "flex-end",
+  flexDirection: "column",
   marginBottom: "10px",
+  visibility: "hidden",
+  "&.end": {
+    visibility: "visible",
+  },
 }));
 
 const MessengerDeliveryStatusContainer = styled(Box)(({ theme }) => ({
@@ -33,34 +38,27 @@ const MessengerDeliveryStatusContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-// TODO REMOVE
-const me: IUser = {
-  id: "son-1",
-  name: "Son Nguyen",
-};
+const Message: React.FC<{ message: IMessage; style: string; isMe: boolean }> =
+  ({ message, style, isMe }) => {
+    const position = isMe ? "right" : "left";
 
-const Message: React.FC<{ message: IMessage }> = ({ message }) => {
-  const isMe = message.user.id === me.id;
-  return (
-    <MessageContainer>
-      {!isMe && (
-        <AvatarContainer>
-          <Avatar sx={{ width: 24, height: 24 }} />
+    return (
+      <MessageContainer>
+        <AvatarContainer className={style}>
+          {!isMe && <Avatar sx={{ width: 24, height: 24 }} />}
         </AvatarContainer>
-      )}
-      <MessageContent
-        message={message.content}
-        position={isMe ? "right" : "left"}
-      />
-      {isMe && (
+        <MessageContent
+          style={style}
+          message={message.content}
+          position={position}
+        />
         <MessengerDeliveryStatusContainer
         // className={clsx(isRead && "isRead")}
         >
-          <Avatar sx={{ width: 18, height: 18 }} />
+          {isMe && <Avatar sx={{ width: 18, height: 18 }} />}
         </MessengerDeliveryStatusContainer>
-      )}
-    </MessageContainer>
-  );
-};
+      </MessageContainer>
+    );
+  };
 
 export default Message;
