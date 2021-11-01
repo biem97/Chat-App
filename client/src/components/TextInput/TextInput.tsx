@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { TextField } from "@mui/material";
 
 // MUI
@@ -9,6 +9,7 @@ import {
   Gif as GifIcon,
   PermMedia as PermMediaIcon,
   Pets as PetsIcon,
+  Send as SendIcon,
 } from "@mui/icons-material";
 
 const Input = styled("input")({
@@ -27,38 +28,85 @@ const CustomTextField = styled(TextField)({
 });
 
 const TextInput: React.FC = () => {
+  const [text, setText] = useState("");
+  const textRef = useRef<HTMLInputElement>();
+
+  const onChangeHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setText(event.target.value);
+  };
+  const onSubmitHandle = useCallback(() => {
+    console.log("Submitted text:", text);
+    setText("");
+  }, [setText, text]);
+
+  const onEnterKeySubmitHandle = useCallback(
+    (event: any) => {
+      event.preventDefault();
+      console.log("hereee");
+      if (event.key === "Enter" && !event.shiftKey) {
+        onSubmitHandle();
+      }
+    },
+    [onSubmitHandle]
+  );
+
+  useEffect(() => {
+    // TODO: Scroll to the bottom on first load
+  }, []);
+
+  useEffect(() => {
+    if (textRef.current) {
+      textRef.current.addEventListener("keydown", onEnterKeySubmitHandle);
+    }
+  }, [onEnterKeySubmitHandle]);
+
   return (
     <TextInputContainer>
-      <label htmlFor="icon-button-file">
-        <Input accept="image/*" id="icon-button-file" type="file" />
-        <IconButton aria-label="upload file" component="span">
-          <ControlPointIcon />
+      <div style={{ flexGrow: 0 }}>
+        <label htmlFor="icon-button-file">
+          <Input accept="image/*" id="icon-button-file" type="file" />
+          <IconButton aria-label="upload file" component="span">
+            <ControlPointIcon />
+          </IconButton>
+        </label>
+        <label htmlFor="icon-button-image">
+          <Input accept="image/*" id="icon-button-image" type="file" />
+          <IconButton aria-label="upload image" component="span">
+            <PermMediaIcon />
+          </IconButton>
+        </label>
+        <IconButton aria-label="like">
+          <PetsIcon />
         </IconButton>
-      </label>
-      <label htmlFor="icon-button-image">
-        <Input accept="image/*" id="icon-button-image" type="file" />
-        <IconButton aria-label="upload image" component="span">
-          <PermMediaIcon />
+        <IconButton aria-label="like">
+          <GifIcon />
         </IconButton>
-      </label>
-      <IconButton aria-label="like">
-        <PetsIcon />
-      </IconButton>
-      <IconButton aria-label="like">
-        <GifIcon />
-      </IconButton>
-      <CustomTextField
-        id="filled-textarea"
-        placeholder="Aa"
-        multiline
-        maxRows={4}
-        variant="outlined"
-        fullWidth
-        size="small"
-      />
-      <IconButton aria-label="like">
-        <ThumbUpIcon />
-      </IconButton>
+      </div>
+      <div style={{ flexGrow: 1 }}>
+        <CustomTextField
+          inputRef={textRef}
+          id="filled-textarea"
+          placeholder="Aa"
+          multiline
+          maxRows={4}
+          variant="outlined"
+          fullWidth
+          size="small"
+          onChange={onChangeHandle}
+          value={text}
+        />
+      </div>
+      <div style={{ flexGrow: 0 }}>
+        {!!text ? (
+          <IconButton aria-label="like" onClick={onSubmitHandle}>
+            <SendIcon />
+          </IconButton>
+        ) : (
+          <IconButton aria-label="like" onClick={onSubmitHandle}>
+            <ThumbUpIcon />
+          </IconButton>
+        )}
+      </div>
     </TextInputContainer>
   );
 };

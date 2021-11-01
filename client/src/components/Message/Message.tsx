@@ -7,7 +7,7 @@ import { IMessage } from "../../types";
 import Avatar from "../Avatar";
 import MessageContent from "../MessageContent";
 
-const MessageContainer = styled(Box)(({ theme }) => ({
+const MessageContainer = styled(Box)(() => ({
   display: "flex",
   margin: "3px 0",
   justifyContent: "center",
@@ -15,7 +15,7 @@ const MessageContainer = styled(Box)(({ theme }) => ({
   padding: "0 5px 0 10px",
 }));
 
-const AvatarContainer = styled(Box)(({ theme }) => ({
+const AvatarContainer = styled(Box)(() => ({
   flexGrow: 0,
   display: "flex",
   justifyContent: "flex-end",
@@ -27,7 +27,7 @@ const AvatarContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-const MessengerDeliveryStatusContainer = styled(Box)(({ theme }) => ({
+const MessengerDeliveryStatusContainer = styled(Box)(() => ({
   alignSelf: "stretch",
   display: "flex",
   alignItems: "flex-end",

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Messages from "../components/Messages";
 import { IMessagesBlocks } from "../types";
 
 // MUI
 import { styled, Box } from "@mui/material";
+import { gql, useQuery, useSubscription } from "@apollo/client";
 
 const MessagesBlocksContainer = styled(Box)(({ theme }) => ({
   flexGrow: 1,
@@ -11,6 +12,26 @@ const MessagesBlocksContainer = styled(Box)(({ theme }) => ({
   overflowX: "hidden",
   overflowY: "auto",
 }));
+
+// const BOOKS = gql`
+//   query BOOKS {
+//     books {
+//       title
+//       author
+//     }
+//   }
+// `;
+
+const NUMBER = gql`
+  query NUMBER {
+    currentNumber
+  }
+`;
+const NUMBER_INCREMENTED = gql`
+  subscription NUMBER_INCREMENTED {
+    numberIncremented
+  }
+`;
 
 const MessagesContainer: React.FC = () => {
   const messagesBlocks: IMessagesBlocks = [
@@ -141,6 +162,22 @@ const MessagesContainer: React.FC = () => {
     },
   ];
 
+  const { data, loading, error, subscribeToMore } = useQuery(NUMBER);
+  useEffect(() => {
+    const unsub = subscribeToMore({
+      document: NUMBER_INCREMENTED,
+      updateQuery: (data) => {
+        console.log(data);
+      },
+    });
+
+    return unsub;
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error...</div>;
+
+  console.log("data: ", data);
   return (
     <MessagesBlocksContainer>
       {messagesBlocks.map((messagesBlock) => (
