@@ -37,13 +37,13 @@ const TextInput: React.FC = () => {
   const onSubmitHandle = useCallback(() => {
     console.log("Submitted text:", text);
     setText("");
-  }, [setText, text]);
+  }, [setText]);
 
   const onEnterKeySubmitHandle = useCallback(
     (event: any) => {
-      event.preventDefault();
-      console.log("hereee");
+      // Return if user presses the enter key
       if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
         onSubmitHandle();
       }
     },
@@ -55,6 +55,7 @@ const TextInput: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    console.log("called here");
     if (textRef.current) {
       textRef.current.addEventListener("keydown", onEnterKeySubmitHandle);
     }
