@@ -7,8 +7,10 @@ const { PubSub } = require("graphql-subscriptions");
 const { SubscriptionServer } = require("subscriptions-transport-ws");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 
+let currentNumber = 0;
+
 (async () => {
-  const PORT = 4000;
+  const PORT = 5000;
   const pubsub = new PubSub();
   const app = express();
   const httpServer = createServer(app);
@@ -60,9 +62,9 @@ const { makeExecutableSchema } = require("@graphql-tools/schema");
     );
   });
 
-  let currentNumber = 0;
   function incrementNumber() {
     currentNumber++;
+    console.log("currentNumber: ", currentNumber);
     pubsub.publish("NUMBER_INCREMENTED", { numberIncremented: currentNumber });
     setTimeout(incrementNumber, 1000);
   }

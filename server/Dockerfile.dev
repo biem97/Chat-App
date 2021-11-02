@@ -1,0 +1,11 @@
+FROM node:15.14.0-buster-slim
+
+WORKDIR /server
+
+COPY ./package.json yarn.lock ./
+
+RUN yarn --non-interactive
+
+COPY . .
+
+CMD [ "yarn", "run", "start:dev" ]

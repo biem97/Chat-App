@@ -1,9 +1,9 @@
 const { PubSub } = require("graphql-subscriptions");
 const pubsub = new PubSub();
-let currentNumber = 0;
+let currentNumber = 10;
+
 function incrementNumber() {
   currentNumber++;
-  console.log("heree: ", currentNumber);
   pubsub.publish("NUMBER_INCREMENTED", { numberIncremented: currentNumber });
   setTimeout(incrementNumber, 1000);
 }
@@ -24,7 +24,9 @@ const books = [
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
   Query: {
-    books: () => books,
+    books: () => {
+      return books;
+    },
   },
   Subscription: {
     numberIncremented: {
