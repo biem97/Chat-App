@@ -3,7 +3,6 @@ import { execute, subscribe } from "graphql";
 
 // Apollo
 import { ApolloServer } from "apollo-server-express";
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 
 // GraphQL Tool
 import { makeExecutableSchema } from "@graphql-tools/schema";
@@ -18,7 +17,7 @@ import typeDefs from "./typeDefs";
 // Resolvers
 import resolvers from "./resolvers";
 
-// Http Server
+// Types
 import { Server } from "http";
 
 const apolloServer = (httpServer: Server) => {
@@ -32,7 +31,6 @@ const apolloServer = (httpServer: Server) => {
   });
 
   SubscriptionServer.create(
-    // @ts-ignore
     { schema, execute, subscribe },
     { server: httpServer, path: server.graphqlPath }
   );

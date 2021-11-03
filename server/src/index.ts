@@ -1,57 +1,19 @@
 // @ts-check
-const { createServer } = require("http");
-const express = require("express");
-const { execute, subscribe } = require("graphql");
-const { ApolloServer, gql } = require("apollo-server-express");
-const { PubSub } = require("graphql-subscriptions");
-const { SubscriptionServer } = require("subscriptions-transport-ws");
-const { makeExecutableSchema } = require("@graphql-tools/schema");
+import express from "express";
+import { createServer } from "http";
 
-let currentNumber = 0;
+// Apollo Server
+import apolloServer from "./graphql";
 
 (async () => {
   const PORT = 5000;
-  const pubsub = new PubSub();
   const app = express();
   const httpServer = createServer(app);
 
-  // Schema definition
-  const typeDefs = gql`
-    type Query {
-      currentNumber: Int
-    }
+  const server = apolloServer(httpServer);
 
-    type Subscription {
-      numberIncremented: Int
-    }
-  `;
-
-  // Resolver map
-  const resolvers = {
-    Query: {
-      currentNumber() {
-        return currentNumber;
-      },
-    },
-    Subscription: {
-      numberIncremented: {
-        subscribe: () => pubsub.asyncIterator(["NUMBER_INCREMENTED"]),
-      },
-    },
-  };
-
-  const schema = makeExecutableSchema({ typeDefs, resolvers });
-
-  const server = new ApolloServer({
-    schema,
-  });
   await server.start();
   server.applyMiddleware({ app });
-
-  SubscriptionServer.create(
-    { schema, execute, subscribe },
-    { server: httpServer, path: server.graphqlPath }
-  );
 
   httpServer.listen(PORT, () => {
     console.log(
@@ -61,13 +23,4 @@ let currentNumber = 0;
       `🚀 Subscription endpoint ready at ws://localhost:${PORT}${server.graphqlPath}`
     );
   });
-
-  function incrementNumber() {
-    currentNumber++;
-    console.log("currentNumber: ", currentNumber);
-    pubsub.publish("NUMBER_INCREMENTED", { numberIncremented: currentNumber });
-    setTimeout(incrementNumber, 1000);
-  }
-  // Start incrementing
-  incrementNumber();
 })();
