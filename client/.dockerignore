@@ -1,0 +1,10 @@
+*
+!src/
+!public/
+!package.json
+!*.js
+!package-lock.json
+!yarn.lock
+!.env.*
+!tsconfig.json
+!docker

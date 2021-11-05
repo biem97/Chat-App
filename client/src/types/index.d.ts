@@ -5,10 +5,10 @@ export interface IUser {
 
 export interface IMessage {
   id: string;
-  user: IUser;
-  content: string;
+  sender: IUser;
+  receiver: IUser;
+  message: string;
+  seen: boolean;
 }
 
-export interface IMessages {
-  messages: IMessage[];
-}
+export type IMessages = IMessage[];

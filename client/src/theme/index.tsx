@@ -6,11 +6,7 @@ import {
   ThemeProvider,
   StyledEngineProvider,
   createTheme,
-  styled,
 } from "@mui/material";
-
-// Emotion
-import { Global } from "@emotion/react";
 
 // Apollo Cache
 import { GET_THEME_MODE } from "../graphql/operations/queries/getThemeMode";
