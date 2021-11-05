@@ -1,23 +1,14 @@
 export interface IUser {
   id: string;
   name: string;
-  //   profilePictureURL: string;
 }
 
 export interface IMessage {
   id: string;
-  content: string;
+  sender: IUser;
+  receiver: IUser;
+  message: string;
+  seen: boolean;
 }
 
-export interface IMessages {
-  messages: IMessage[];
-}
-
-export interface IMessagesBlock {
-  id: string; // Messages block id
-  user: IUser;
-  messages: IMessage[];
-  isRead: boolean;
-}
-
-export type IMessagesBlocks = IMessagesBlock[];
+export type IMessages = IMessage[];
