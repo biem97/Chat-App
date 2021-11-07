@@ -14,8 +14,8 @@ import { styled, Box } from "@mui/material";
 // UUID
 import UserInputForm from "./UserInputForm";
 
-// Types
-import { IUser } from "../types";
+// Providers
+import { UserProvider } from "../context";
 
 const ChatBoxContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -24,20 +24,16 @@ const ChatBoxContainer = styled(Box)(({ theme }) => ({
 }));
 
 const App: React.FC = () => {
-  const [user, setUser] = React.useState<IUser>({
-    id: "",
-    name: "",
-    initialized: false,
-  });
-
   return (
     <Layout>
-      {!user.initialized && <UserInputForm setUser={setUser} />}
-      <Navbar user={user} />
-      <ChatBoxContainer>
-        <MessagesContainer />
-        <TextInput />
-      </ChatBoxContainer>
+      <UserProvider>
+        <UserInputForm />
+        <Navbar />
+        <ChatBoxContainer>
+          <MessagesContainer />
+          <TextInput />
+        </ChatBoxContainer>
+      </UserProvider>
     </Layout>
   );
 };

@@ -19,13 +19,12 @@ import {
 // Components
 import AvatarWithBadge from "../Avatar/AvatarWithBadge";
 import { ThemeSwitch } from "../Switch";
-import { IUser } from "../../types";
 
-interface NavbarProps {
-  user: IUser;
-}
+// Hooks
+import { useUser } from "../../hooks";
 
-const Navbar = ({ user }: NavbarProps) => {
+const Navbar = () => {
+  const [user] = useUser();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);

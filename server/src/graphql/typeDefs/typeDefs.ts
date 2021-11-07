@@ -21,10 +21,8 @@ const typeDefs = gql`
 
   type Message {
     id: ID!
-    receiver: User!
     sender: User!
     message: String!
-    seen: Boolean!
   }
 `;
 

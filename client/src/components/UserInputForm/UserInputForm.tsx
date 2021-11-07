@@ -4,17 +4,11 @@ import { Box, TextField, Typography, Modal, Link } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Favorite as FavoriteIcon } from "@mui/icons-material";
 
-// Types
-import { IUser } from "../../types";
+// Hooks
+import { useUser } from "../../hooks";
 
-// UUID
-import { v4 as uuidv4 } from "uuid";
-
-type UserInputFormProps = {
-  setUser: React.Dispatch<IUser>;
-};
-
-const UserInputForm = ({ setUser }: UserInputFormProps) => {
+const UserInputForm = () => {
+  const [user, updateUser] = useUser();
   const [loading, setLoading] = React.useState(false);
   const nameInputRef = React.useRef<HTMLInputElement>(null);
   const [isError, setIsError] = React.useState<boolean>(false);
@@ -29,8 +23,7 @@ const UserInputForm = ({ setUser }: UserInputFormProps) => {
       setLoading(true);
       setTimeout(
         () =>
-          setUser({
-            id: uuidv4(),
+          updateUser({
             name: `${nameInputRef.current?.value}`,
             initialized: true,
           }),
@@ -39,7 +32,7 @@ const UserInputForm = ({ setUser }: UserInputFormProps) => {
     } else {
       console.error("Error: Couldn't find the name input ref");
     }
-  }, [setUser]);
+  }, [updateUser]);
 
   const onKeyDownHandle = React.useCallback(
     (event: React.KeyboardEvent) => {
@@ -57,7 +50,7 @@ const UserInputForm = ({ setUser }: UserInputFormProps) => {
 
   return (
     <Modal
-      open={true}
+      open={!user.initialized}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
       sx={{

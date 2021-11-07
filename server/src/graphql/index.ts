@@ -31,7 +31,34 @@ const apolloServer = (httpServer: Server) => {
   });
 
   SubscriptionServer.create(
-    { schema, execute, subscribe },
+    {
+      schema,
+      execute,
+      subscribe,
+      onConnect: async (
+        connectionParams: any,
+        webSocket: any,
+        context: any
+      ) => {
+        if (connectionParams.authToken) {
+          console.log("Connected");
+
+          const context = {
+            user: { authToken: connectionParams.authToken },
+            webSocket,
+          };
+
+          return context;
+        }
+
+        throw new Error("Missing auth token");
+      },
+      onDisconnect: async (webSocket: any, context: any) => {
+        // console.log("webSocket: ", webSocket);
+        console.log("context: ", context.user);
+        console.log("Disconnected");
+      },
+    },
     { server: httpServer, path: server.graphqlPath }
   );
 

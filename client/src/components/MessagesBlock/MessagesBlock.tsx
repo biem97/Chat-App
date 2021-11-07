@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import MessageBlock from "../MessageBlock";
 
 // Type
@@ -6,6 +6,9 @@ import { IMessages, IMessage } from "../../types";
 
 // MUI
 import { styled, Box } from "@mui/material";
+
+// Hooks
+import { useUser } from "../../hooks";
 
 const MessagesContainer = styled(Box)(({ theme }) => ({
   flexGrow: 1,
@@ -20,36 +23,32 @@ interface MessageProps {
   messages: IMessages;
 }
 
-const meId = "son-1";
-
 const MessagesBlock: React.FC<MessageProps> = ({ messages }) => {
+  const [user] = useUser();
   const messagesLength = messages.length;
+  const currentSender = useRef<any>();
 
   return (
     <MessagesContainer>
-      {messages
-        .slice(0)
-        .reverse()
-        .map((messageObject: IMessage, index) => {
-          const { sender, message, id } = messageObject;
-          const isMe = sender.id === meId;
-          const style =
-            messagesLength === 1
-              ? ""
-              : index === 0
-              ? "start"
-              : index === messagesLength - 1
-              ? "end"
-              : "middle";
-          return (
-            <MessageBlock
-              key={id}
-              message={message}
-              style={style}
-              isMe={isMe}
-            />
-          );
-        })}
+      {messages.map((messageObject: IMessage, index, messages) => {
+        const { sender, message, id } = messageObject;
+        // if () {
+        // currentSender.current = sender;
+        // }
+
+        const isMe = sender.id === user.id;
+        const style = messageObject.id
+          ? ""
+          : index === 0
+          ? "end"
+          : index === messagesLength - 1
+          ? "start"
+          : "middle";
+
+        return (
+          <MessageBlock key={id} message={message} style={style} isMe={isMe} />
+        );
+      })}
     </MessagesContainer>
   );
 };

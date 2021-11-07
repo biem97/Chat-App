@@ -6,9 +6,7 @@ export interface IUser {
 export interface IMessage {
   id: string;
   sender: IUser;
-  receiver: IUser;
   message: string;
-  seen: boolean;
 }
 
 export type IMessages = IMessage[];

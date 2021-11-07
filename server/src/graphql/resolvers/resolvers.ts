@@ -1,48 +1,24 @@
 // Pubsub
 import pubsub, { TRIGGERS } from "./pubsub";
 
-const messagesInMemory = {
-  messages: [
-    {
-      id: "msg-1",
-      sender: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      receiver: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      message: "Hello John",
-      seen: true,
-    },
-    {
-      id: "msg-2",
-      sender: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      receiver: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      message: "Message 2",
-      seen: true,
-    },
-    {
-      id: "msg-3",
-      sender: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      receiver: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      message: "ipsumajwoidjaiowdjioajwiodjiaowd",
-      seen: true,
-    },
-  ],
+// UUID
+import { v4 as uuidv4 } from "uuid";
+
+interface IUser {
+  id: string;
+  name: string;
+}
+interface MessageInMemory {
+  id: string;
+  sender: IUser;
+  message: string;
+}
+interface MessagesInMemory {
+  messages: MessageInMemory[];
+}
+
+const messagesInMemory: MessagesInMemory = {
+  messages: [],
 };
 
 const resolvers = {
@@ -53,45 +29,28 @@ const resolvers = {
   },
   Mutation: {
     sendMessage: (parents: any, args: any, context: any, info: any) => {
-      console.log("args: ", args.message);
+      console.log("context: ", context.user.authToken);
       const newMessage = {
-        id: `msg-1-${Date.now()}`,
+        id: uuidv4(),
         sender: {
-          id: "son-1",
+          id: context.user.authToken,
           name: "Son Nguyen",
         },
-        receiver: {
-          id: "john-2",
-          name: "John Doe",
-        },
         message: args.message,
-        seen: true,
       };
-      messagesInMemory.messages.push(newMessage);
+      messagesInMemory.messages.unshift(newMessage);
 
       pubsub.publish(TRIGGERS.ON_PUBLISH_MESSAGES, {
         onPublishMessage: newMessage,
-      });
-      pubsub.publish(TRIGGERS.ON_PUBLISH_MESSAGES, {
-        onPublishMessage: {
-          id: `msg-1-${Date.now() + 1}`,
-          receiver: {
-            id: "son-1",
-            name: "Son Nguyen",
-          },
-          sender: {
-            id: "john-2",
-            name: "John Doe",
-          },
-          message: `Date: ${Date.now()}`,
-          seen: true,
-        },
       });
     },
   },
   Subscription: {
     onPublishMessage: {
-      subscribe: () => pubsub.asyncIterator([TRIGGERS.ON_PUBLISH_MESSAGES]),
+      subscribe: async (parent: any, args: any, context: any, info: any) => {
+        console.log("Context: ", context.user);
+        return pubsub.asyncIterator([TRIGGERS.ON_PUBLISH_MESSAGES]);
+      },
     },
   },
 };

@@ -4,10 +4,18 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 // Cache
 import { cache } from "./cache";
 
+// UUID
+import { uuid } from "../context/UserContext";
+
 const wsLink = new WebSocketLink({
   uri: "ws://localhost:5000/graphql",
   options: {
     reconnect: true,
+    lazy: true,
+    inactivityTimeout: 0,
+    connectionParams: () => ({
+      authToken: uuid,
+    }),
   },
 });
 

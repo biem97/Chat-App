@@ -1,10 +1,12 @@
 // MUI
-import { styled, Box } from "@mui/material";
+import { styled, Box, Typography } from "@mui/material";
 // import clsx from "clsx";
 
 // Component
 import Avatar from "../Avatar";
 import Message from "../Message";
+
+const MessageCell = styled(Box)(() => ({}));
 
 const MessageContainer = styled(Box)(() => ({
   display: "flex",
@@ -47,17 +49,19 @@ const MessageBlock: React.FC<MessageProps> = ({ message, style, isMe }) => {
   const position = isMe ? "right" : "left";
 
   return (
-    <MessageContainer>
-      <AvatarContainer className={style}>
-        {!isMe && <Avatar sx={{ width: 24, height: 24 }} />}
-      </AvatarContainer>
-      <Message style={style} message={message} position={position} />
-      <MessengerDeliveryStatusContainer
-      // className={clsx(isRead && "isRead")}
-      >
-        {isMe && <Avatar sx={{ width: 18, height: 18 }} />}
-      </MessengerDeliveryStatusContainer>
-    </MessageContainer>
+    <MessageCell>
+      <MessageContainer>
+        <AvatarContainer className={style}>
+          {!isMe && <Avatar sx={{ width: 24, height: 24 }} />}
+        </AvatarContainer>
+        <Message style={style} message={message} position={position} />
+        <MessengerDeliveryStatusContainer
+        // className={clsx(isRead && "isRead")}
+        >
+          {style === "end" && <Avatar sx={{ width: 18, height: 18 }} />}
+        </MessengerDeliveryStatusContainer>
+      </MessageContainer>
+    </MessageCell>
   );
 };
 

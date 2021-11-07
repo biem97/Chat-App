@@ -13,21 +13,17 @@ import {
 
 // GraphQL
 import { useMutation, gql } from "@apollo/client";
+import { useUser } from "../../hooks";
 
 const SEND_MESSAGE = gql`
   mutation SEND_MESSAGE($message: String!) {
     sendMessage(message: $message) {
       id
-      receiver {
-        id
-        name
-      }
       sender {
         id
         name
       }
       message
-      seen
     }
   }
 `;
@@ -48,9 +44,9 @@ const CustomTextField = styled(TextField)({
 });
 
 const TextInput: React.FC = () => {
+  const [user] = useUser();
   const [text, setText] = useState("");
   const textRef = useRef<string>("");
-  const textFieldRef = useRef<HTMLInputElement>();
   const [sendMessage] = useMutation(SEND_MESSAGE);
 
   const onChangeHandle = useCallback(
@@ -62,27 +58,28 @@ const TextInput: React.FC = () => {
   );
 
   const onSubmitHandle = useCallback(() => {
-    sendMessage({
-      variables: {
-        message: textRef.current,
-      },
-    });
-    setText("");
-  }, [setText, sendMessage]);
+    if (!user.initialized)
+      console.error("Something wrong happened. No user context found.");
+
+    if (user.initialized && textRef.current.length > 0) {
+      sendMessage({
+        variables: {
+          message: textRef.current,
+        },
+      });
+      textRef.current = "";
+      setText("");
+    }
+  }, [user, setText, sendMessage]);
 
   const onKeyDownHandle = useCallback(
     (event: React.KeyboardEvent) => {
       if (event.code === "Enter" && !event.shiftKey) {
         event.preventDefault();
-        sendMessage({
-          variables: {
-            message: textRef.current,
-          },
-        });
-        setText("");
+        onSubmitHandle();
       }
     },
-    [sendMessage, setText]
+    [onSubmitHandle]
   );
 
   useEffect(() => {
@@ -113,7 +110,6 @@ const TextInput: React.FC = () => {
       </Box>
       <Box sx={{ flexGrow: 1 }}>
         <CustomTextField
-          inputRef={textFieldRef}
           id="filled-textarea"
           placeholder="Aa"
           multiline
@@ -132,7 +128,7 @@ const TextInput: React.FC = () => {
             <SendIcon />
           </IconButton>
         ) : (
-          <IconButton aria-label="like" onClick={onSubmitHandle}>
+          <IconButton aria-label="like">
             <ThumbUpIcon />
           </IconButton>
         )}

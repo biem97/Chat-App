@@ -5,41 +5,6 @@ import { IMessages } from "../types";
 // MUI
 import { gql, useQuery } from "@apollo/client";
 
-const MESSAGES = gql`
-  query MESSAGES {
-    messages {
-      id
-      receiver {
-        id
-        name
-      }
-      sender {
-        id
-        name
-      }
-      message
-      seen
-    }
-  }
-`;
-const ON_PUBLISH_MESSAGE = gql`
-  subscription ON_PUBLISH_MESSAGE {
-    onPublishMessage {
-      id
-      receiver {
-        id
-        name
-      }
-      sender {
-        id
-        name
-      }
-      message
-      seen
-    }
-  }
-`;
-
 const MessagesContainer: React.FC = () => {
   const [messages, setMessage] = useState<IMessages>([]);
   const { subscribeToMore, loading } = useQuery(MESSAGES, {
@@ -60,7 +25,7 @@ const MessagesContainer: React.FC = () => {
           },
         }
       ) => {
-        setMessage((prev) => [...prev, onPublishMessage]);
+        setMessage((prev) => [onPublishMessage, ...prev]);
       },
     });
 
@@ -73,3 +38,29 @@ const MessagesContainer: React.FC = () => {
 };
 
 export default MessagesContainer;
+
+const MESSAGES = gql`
+  query MESSAGES {
+    messages {
+      id
+      sender {
+        id
+        name
+      }
+      message
+    }
+  }
+`;
+
+const ON_PUBLISH_MESSAGE = gql`
+  subscription ON_PUBLISH_MESSAGE {
+    onPublishMessage {
+      id
+      sender {
+        id
+        name
+      }
+      message
+    }
+  }
+`;
