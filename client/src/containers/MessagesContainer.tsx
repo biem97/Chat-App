@@ -1,55 +1,74 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Messages from "../components/MessagesBlock";
 import { IMessages } from "../types";
 
 // MUI
-import { styled, Box } from "@mui/material";
 import { gql, useQuery } from "@apollo/client";
 
-const NUMBER = gql`
-  query NUMBER {
-    currentNumber
+const MESSAGES = gql`
+  query MESSAGES {
+    messages {
+      id
+      receiver {
+        id
+        name
+      }
+      sender {
+        id
+        name
+      }
+      message
+      seen
+    }
   }
 `;
-const NUMBER_INCREMENTED = gql`
-  subscription NUMBER_INCREMENTED {
-    numberIncremented
+const ON_PUBLISH_MESSAGE = gql`
+  subscription ON_PUBLISH_MESSAGE {
+    onPublishMessage {
+      id
+      receiver {
+        id
+        name
+      }
+      sender {
+        id
+        name
+      }
+      message
+      seen
+    }
   }
 `;
 
 const MessagesContainer: React.FC = () => {
-  const messages: IMessages = [
-    {
-      id: "msg-1",
-      sender: {
-        id: "son-1",
-        name: "Son Nguyen",
-      },
-      receiver: {
-        id: "john-2",
-        name: "John Doe",
-      },
-      message: "Hello John",
-      seen: true,
+  const [messages, setMessage] = useState<IMessages>([]);
+  const { subscribeToMore, loading } = useQuery(MESSAGES, {
+    onCompleted: ({ messages }) => setMessage(messages),
+    onError: (err) => {
+      console.error("Error: ", err);
     },
-  ];
+  });
 
-  const { data, loading, error, subscribeToMore } = useQuery(NUMBER);
   useEffect(() => {
     const unsub = subscribeToMore({
-      document: NUMBER_INCREMENTED,
-      updateQuery: (data) => {
-        console.log(data);
+      document: ON_PUBLISH_MESSAGE,
+      updateQuery: (
+        prevData,
+        {
+          subscriptionData: {
+            data: { onPublishMessage },
+          },
+        }
+      ) => {
+        setMessage((prev) => [...prev, onPublishMessage]);
       },
     });
 
     return unsub;
-  }, []);
+  }, [subscribeToMore]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error...</div>;
+  if (loading) return <div>Loading</div>;
 
-  console.log("data: ", data);
   return <Messages messages={messages} />;
 };
 

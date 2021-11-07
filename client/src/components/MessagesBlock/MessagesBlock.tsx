@@ -12,6 +12,8 @@ const MessagesContainer = styled(Box)(({ theme }) => ({
   flexBasis: 0,
   overflowX: "hidden",
   overflowY: "auto",
+  display: "flex",
+  flexDirection: "column-reverse",
 }));
 
 interface MessageProps {
@@ -25,21 +27,29 @@ const MessagesBlock: React.FC<MessageProps> = ({ messages }) => {
 
   return (
     <MessagesContainer>
-      {messages.map((messageObject: IMessage, index) => {
-        const { sender, message, id } = messageObject;
-        const isMe = sender.id === meId;
-        const style =
-          messagesLength === 1
-            ? ""
-            : index === 0
-            ? "start"
-            : index === messagesLength - 1
-            ? "end"
-            : "middle";
-        return (
-          <MessageBlock key={id} message={message} style={style} isMe={isMe} />
-        );
-      })}
+      {messages
+        .slice(0)
+        .reverse()
+        .map((messageObject: IMessage, index) => {
+          const { sender, message, id } = messageObject;
+          const isMe = sender.id === meId;
+          const style =
+            messagesLength === 1
+              ? ""
+              : index === 0
+              ? "start"
+              : index === messagesLength - 1
+              ? "end"
+              : "middle";
+          return (
+            <MessageBlock
+              key={id}
+              message={message}
+              style={style}
+              isMe={isMe}
+            />
+          );
+        })}
     </MessagesContainer>
   );
 };

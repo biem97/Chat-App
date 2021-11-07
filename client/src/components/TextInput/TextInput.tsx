@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { TextField } from "@mui/material";
 
 // MUI
-import { styled, Paper, IconButton } from "@mui/material";
+import { styled, Paper, IconButton, Box, TextField } from "@mui/material";
 import {
   ThumbUp as ThumbUpIcon,
   ControlPoint as ControlPointIcon,
@@ -11,6 +10,27 @@ import {
   Pets as PetsIcon,
   Send as SendIcon,
 } from "@mui/icons-material";
+
+// GraphQL
+import { useMutation, gql } from "@apollo/client";
+
+const SEND_MESSAGE = gql`
+  mutation SEND_MESSAGE($message: String!) {
+    sendMessage(message: $message) {
+      id
+      receiver {
+        id
+        name
+      }
+      sender {
+        id
+        name
+      }
+      message
+      seen
+    }
+  }
+`;
 
 const Input = styled("input")({
   display: "none",
@@ -29,41 +49,49 @@ const CustomTextField = styled(TextField)({
 
 const TextInput: React.FC = () => {
   const [text, setText] = useState("");
-  const textRef = useRef<HTMLInputElement>();
+  const textRef = useRef<string>("");
+  const textFieldRef = useRef<HTMLInputElement>();
+  const [sendMessage] = useMutation(SEND_MESSAGE);
 
-  const onChangeHandle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
-  };
+  const onChangeHandle = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setText(event.target.value);
+      textRef.current = event.target.value;
+    },
+    [setText]
+  );
+
   const onSubmitHandle = useCallback(() => {
-    console.log("Submitted text:", text);
+    sendMessage({
+      variables: {
+        message: textRef.current,
+      },
+    });
     setText("");
-  }, [setText]);
+  }, [setText, sendMessage]);
 
-  const onEnterKeySubmitHandle = useCallback(
-    (event: any) => {
-      // Return if user presses the enter key
-      if (event.key === "Enter" && !event.shiftKey) {
+  const onKeyDownHandle = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.code === "Enter" && !event.shiftKey) {
         event.preventDefault();
-        onSubmitHandle();
+        sendMessage({
+          variables: {
+            message: textRef.current,
+          },
+        });
+        setText("");
       }
     },
-    [onSubmitHandle]
+    [sendMessage, setText]
   );
 
   useEffect(() => {
     // TODO: Scroll to the bottom on first load
   }, []);
 
-  useEffect(() => {
-    console.log("called here");
-    if (textRef.current) {
-      textRef.current.addEventListener("keydown", onEnterKeySubmitHandle);
-    }
-  }, [onEnterKeySubmitHandle]);
-
   return (
     <TextInputContainer>
-      <div style={{ flexGrow: 0 }}>
+      <Box sx={{ flexGrow: 0 }}>
         <label htmlFor="icon-button-file">
           <Input accept="image/*" id="icon-button-file" type="file" />
           <IconButton aria-label="upload file" component="span">
@@ -82,10 +110,10 @@ const TextInput: React.FC = () => {
         <IconButton aria-label="like">
           <GifIcon />
         </IconButton>
-      </div>
-      <div style={{ flexGrow: 1 }}>
+      </Box>
+      <Box sx={{ flexGrow: 1 }}>
         <CustomTextField
-          inputRef={textRef}
+          inputRef={textFieldRef}
           id="filled-textarea"
           placeholder="Aa"
           multiline
@@ -94,10 +122,11 @@ const TextInput: React.FC = () => {
           fullWidth
           size="small"
           onChange={onChangeHandle}
+          onKeyDown={onKeyDownHandle}
           value={text}
         />
-      </div>
-      <div style={{ flexGrow: 0 }}>
+      </Box>
+      <Box sx={{ flexGrow: 0 }}>
         {!!text ? (
           <IconButton aria-label="like" onClick={onSubmitHandle}>
             <SendIcon />
@@ -107,7 +136,7 @@ const TextInput: React.FC = () => {
             <ThumbUpIcon />
           </IconButton>
         )}
-      </div>
+      </Box>
     </TextInputContainer>
   );
 };

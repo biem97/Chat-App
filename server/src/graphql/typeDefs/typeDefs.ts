@@ -1,18 +1,30 @@
 import { gql } from "apollo-server-express";
 
 const typeDefs = gql`
-  type Book {
-    title: String
-    author: String
-  }
-
+  ### Special type
   type Query {
-    books: [Book]
-    currentNumber: Int
+    messages: [Message]!
+  }
+  type Mutation {
+    sendMessage(message: String!): Message
   }
 
   type Subscription {
-    numberIncremented: Int
+    onPublishMessage: Message
+  }
+
+  ### Type
+  type User {
+    id: ID!
+    name: String!
+  }
+
+  type Message {
+    id: ID!
+    receiver: User!
+    sender: User!
+    message: String!
+    seen: Boolean!
   }
 `;
 

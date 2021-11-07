@@ -3,6 +3,7 @@ import React from "react";
 // Material UI
 import { styled } from "@mui/material/styles";
 import { Badge, Avatar } from "@mui/material";
+import { IUser } from "../../types";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -33,17 +34,18 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export default function BadgeAvatars() {
+interface BadgeAvatarsProps {
+  user: IUser;
+}
+
+export default function BadgeAvatars({ user }: BadgeAvatarsProps) {
   return (
     <StyledBadge
       overlap="circular"
       anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      variant="dot"
+      variant={user.name ? "dot" : "standard"}
     >
-      <Avatar
-        alt="Remy Sharp"
-        src="https://mui.com/static/images/avatar/1.jpg"
-      />
+      <Avatar alt="John Doe" src="https://i.pravatar.cc/300" />
     </StyledBadge>
   );
 }
