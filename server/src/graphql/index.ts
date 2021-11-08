@@ -54,8 +54,6 @@ const apolloServer = (httpServer: Server) => {
         throw new Error("Missing auth token");
       },
       onDisconnect: async (webSocket: any, context: any) => {
-        // console.log("webSocket: ", webSocket);
-        console.log("context: ", context.user);
         console.log("Disconnected");
       },
     },

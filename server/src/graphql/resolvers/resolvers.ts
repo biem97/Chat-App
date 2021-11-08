@@ -39,7 +39,7 @@ const resolvers = {
         message: args.message,
       };
       messagesInMemory.messages.unshift(newMessage);
-
+      console.log("newMessage:", newMessage.sender.id);
       pubsub.publish(TRIGGERS.ON_PUBLISH_MESSAGES, {
         onPublishMessage: newMessage,
       });
