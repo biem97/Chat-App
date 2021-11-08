@@ -40,7 +40,6 @@ const MessageContentPaper = styled(Paper)(({ theme }) => ({
     borderTopRightRadius: "4px",
   },
   "&.left-start": {
-    marginTop: "8px",
     borderBottomLeftRadius: "4px",
   },
   "&.left-middle": {
@@ -80,6 +79,7 @@ const Message: React.FC<IMessage> = ({ message, position, style }) => {
 
   return (
     <MessageContentContainer className={position}>
+      {/* <MessageContentPaper className={clsx(position)}> */}
       <MessageContentPaper className={clsx(position, `${position}-${style}`)}>
         {message}
       </MessageContentPaper>

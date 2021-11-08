@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import MessageBlock from "../MessageBlock";
 
 // Type
@@ -10,7 +10,7 @@ import { styled, Box } from "@mui/material";
 // Hooks
 import { useUser } from "../../hooks";
 
-const MessagesContainer = styled(Box)(({ theme }) => ({
+const MessagesContainer = styled(Box)(() => ({
   flexGrow: 1,
   flexBasis: 0,
   overflowX: "hidden",
@@ -25,28 +25,30 @@ interface MessageProps {
 
 const MessagesBlock: React.FC<MessageProps> = ({ messages }) => {
   const [user] = useUser();
-  const messagesLength = messages.length;
-  const currentSender = useRef<any>();
 
   return (
     <MessagesContainer>
       {messages.map((messageObject: IMessage, index, messages) => {
         const { sender, message, id } = messageObject;
-        // if () {
-        // currentSender.current = sender;
-        // }
 
-        const isMe = sender.id === user.id;
-        const style = messageObject.id
-          ? ""
-          : index === 0
-          ? "end"
-          : index === messagesLength - 1
-          ? "start"
-          : "middle";
+        const isMe = user.id === sender.id;
+
+        let style;
+        if (messages[index + 1]?.sender.id === sender.id) {
+          if (messages[index - 1]?.sender.id === sender.id) style = "middle";
+          else style = "end";
+        } else if (messages[index - 1]?.sender.id === sender.id)
+          style = "start";
+        else style = "";
 
         return (
-          <MessageBlock key={id} message={message} style={style} isMe={isMe} />
+          <MessageBlock
+            key={id}
+            message={message}
+            sender={sender}
+            style={style}
+            isMe={isMe}
+          />
         );
       })}
     </MessagesContainer>

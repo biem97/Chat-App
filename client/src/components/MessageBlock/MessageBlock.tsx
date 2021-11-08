@@ -6,11 +6,17 @@ import { styled, Box, Typography } from "@mui/material";
 import Avatar from "../Avatar";
 import Message from "../Message";
 
-const MessageCell = styled(Box)(() => ({}));
+// Hooks
+import { IUser } from "../../types";
+
+const MessageCell = styled(Box)(() => ({
+  display: "flex",
+  flexDirection: "column",
+  margin: "3px 0",
+}));
 
 const MessageContainer = styled(Box)(() => ({
   display: "flex",
-  margin: "3px 0",
   justifyContent: "center",
   gap: "10px",
   padding: "0 5px 0 10px",
@@ -39,17 +45,37 @@ const MessengerDeliveryStatusContainer = styled(Box)(() => ({
   },
 }));
 
-type MessageProps = {
+interface MessageProps {
   message: string;
+  sender: IUser;
   style: string;
   isMe: boolean;
-};
+}
 
-const MessageBlock: React.FC<MessageProps> = ({ message, style, isMe }) => {
+const MessageBlock: React.FC<MessageProps> = ({
+  message,
+  sender,
+  style,
+  isMe,
+}) => {
+  const { name } = sender;
   const position = isMe ? "right" : "left";
 
   return (
     <MessageCell>
+      {style === "start" && !isMe && (
+        <Typography
+          sx={{
+            marginLeft: 6,
+            marginRight: 6,
+            marginTop: "8px",
+          }}
+          variant="caption"
+          className={position}
+        >
+          {name}
+        </Typography>
+      )}
       <MessageContainer>
         <AvatarContainer className={style}>
           {!isMe && <Avatar sx={{ width: 24, height: 24 }} />}
@@ -58,7 +84,7 @@ const MessageBlock: React.FC<MessageProps> = ({ message, style, isMe }) => {
         <MessengerDeliveryStatusContainer
         // className={clsx(isRead && "isRead")}
         >
-          {style === "end" && <Avatar sx={{ width: 18, height: 18 }} />}
+          {<Avatar sx={{ width: 18, height: 18 }} />}
         </MessengerDeliveryStatusContainer>
       </MessageContainer>
     </MessageCell>

@@ -5,7 +5,7 @@ import { IUser } from "../types";
 // UUID
 import { v4 as uuidv4 } from "uuid";
 const uuid = uuidv4();
-
+console.log("uuuid: ", uuid);
 // interface IUserContext {
 //   user: IUser;
 //   updateUser: any;
