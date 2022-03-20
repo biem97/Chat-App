@@ -56,6 +56,7 @@ const apolloServer = (httpServer: Server) => {
       onDisconnect: async (webSocket: any, context: any) => {
         console.log("Disconnected");
       },
+      keepAlive: 13000,
     },
     { server: httpServer, path: server.graphqlPath }
   );
